@@ -14,7 +14,7 @@ def audio_test():
 
     plt.figure(0)
     plt.plot(t,x)
-    plt.title('audio signal, sampled')
+    plt.title('Audio signal, sampled')
     plt.show()
 
     # Quantize data
@@ -62,12 +62,57 @@ def audio_test():
     plt.title('Signal multiplied by carrier')
     plt.show()
 
-    plt.figure(4)
-    plt.plot(np.real(s_bb), np.imag(s_bb), 'o')
-    plt.xlim(-1.5,1.5)
-    plt.ylim(-1.5,1.5)
-    plt.title('Constellation diagram')
+    # Channel and demodulation
+    for i,EbN0 in enumerate(EbN0dB):
+            
+            # Compute and add AWGN noise
+            r = awgn(s, EbN0, L) # Refer Chapter section 4.1
+
+            r_bb = r*np.cos(2*np.pi*Fc*t/Fs) # Recovered baseband signal
+            ak_hat = bpsk_demod(r_bb, L) # Baseband correlation demodulator
+            BER[i] = np.sum(bit_stream != ak_hat)/len(bit_stream) # Bit Error Rate Computation (!= means "not equal to")
+
+            # Received signal waveform zoomed to first 10 bits, EbN0dB=9
+            if EbN0 == 10:
+
+                plt.figure(4)
+                plt.clf()
+                plt.plot(t,r)
+                plt.xlabel('t(s)')
+                plt.ylabel('r(t)')
+                plt.xlim(0,10*L)
+                plt.title('Recieved signal with noise, EbN0=10')
+                plt.show()
+
+                plt.figure(5)
+                plt.clf()
+                plt.plot(16*np.arange(len(bit_stream)),ak_hat)
+                plt.xlabel('t(s)')
+                plt.ylabel('ak_hat')
+                plt.xlim(0,10*L)
+                plt.title('Demodulated signal, EbN0=10')
+                plt.show()
+
+                plt.figure(6)
+                plt.plot(np.real(r_bb), np.imag(r_bb), 'o')
+                plt.xlim(-1.5,1.5)
+                plt.ylim(-1.5,1.5)
+                plt.title('Constellation diagram')
+                plt.show()
+
+        #----------Theoretical Bit/Symbol Error Rates----------
+    theoreticalBER = 0.5*erfc(np.sqrt(10**(EbN0dB/10))) # Theoretical bit error rate
+        
+        #----------Plots----------
+    plt.figure(7)
+    plt.clf()
+    plt.semilogy(EbN0dB, BER, 'k*', label='Simulated') # Simulated BER
+    plt.semilogy(EbN0dB, theoreticalBER, 'r-', label='Theoretical')
+    plt.xlabel('$E_b/N_0$ (dB)')
+    plt.ylabel('Probability of Bit Error - $P_b$')
+    plt.title('Probability of Bit Error for BPSK modulation')
     plt.show()
+
 
 
 audio_test()

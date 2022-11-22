@@ -14,6 +14,7 @@ def audio_test():
 
     plt.figure(0)
     plt.plot(t,x)
+    plt.title('audio signal, sampled')
     plt.show()
 
     # Quantize data
@@ -23,6 +24,7 @@ def audio_test():
 
     plt.figure(1)
     plt.plot(t,x_quantized)
+    plt.title('Audio signal, quantized')
     plt.show()
 
     # Convert quantized data into bit stream
@@ -33,7 +35,6 @@ def audio_test():
     bit_stream.extend(bit_stream_string)
     bit_stream = list(map(int, bit_stream))
     bit_stream = np.asarray(bit_stream)
-    print(bit_stream)
 
     # Modulation
     EbN0dB = np.arange(-4,11,2) # Eb/N0 range in dB for simulation

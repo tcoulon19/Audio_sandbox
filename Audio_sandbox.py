@@ -15,6 +15,7 @@ def audio_test():
     plt.figure(0)
     plt.plot(t,x)
     plt.title('Audio signal, sampled')
+    plt.ylim(-1,1)
     plt.show()
 
     # Quantize data
@@ -25,6 +26,7 @@ def audio_test():
     plt.figure(1)
     plt.plot(t,x_quantized)
     plt.title('Audio signal, quantized')
+    plt.ylim(-1,1)
     plt.show()
 
     # Convert quantized data into bit stream
@@ -76,13 +78,24 @@ def audio_test():
         bit_stream_rx_symb = \
             bit_stream_rx[i*int(np.sqrt(quantization_levels)):i*int(np.sqrt(quantization_levels))+\
             int(np.sqrt(quantization_levels))]
-        rx_quantized_str = list(map(int, bit_stream_rx_symb))
-        rx_quantized_str = list(map(str, rx_quantized_str))
-        rx_quantized_str = "".join(rx_quantized_str)
-        rx_quantized.append(rx_quantized_str)
+        bit_stream_rx_symb = list(map(int, bit_stream_rx_symb))
+        bit_stream_rx_symb = list(map(str, bit_stream_rx_symb))
+        bit_stream_rx_symb = "".join(bit_stream_rx_symb)
+        rx_quantized.append(int(bit_stream_rx_symb,2))
 
-    print(rx_quantized_str)
-    print(rx_quantized)
+    plt.figure(9)
+    plt.plot(t,rx_quantized)
+    plt.title('Audio signal received, quantized')
+    plt.ylim(-1,1)
+    plt.show()
+
+    rx = [(val - quantization_levels/2)/(quantization_levels/2) for val in rx_quantized]
+
+    plt.figure(10)
+    plt.plot(t,rx)
+    plt.title('Audio signal received, quantized')
+    plt.ylim(-1,1)
+    plt.show()
 
 
 

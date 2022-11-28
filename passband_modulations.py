@@ -49,7 +49,7 @@ def bpsk_demod(r_bb, L):
 
 
 # QPSK modulator. Note: Plots of I(t) and Q(t) plot I and Q, not I_t, and Q_t
-def qpsk_mod(a, fc, OF, enable_plot = False):
+def qpsk_mod(a, fc, OF, enable_plot = False, enable_plot_const = False):
 
     import numpy as np
     import matplotlib.pyplot as plt
@@ -118,6 +118,14 @@ def qpsk_mod(a, fc, OF, enable_plot = False):
         plt.title('$s(t) = I(t) cos(2 \pi f_c t) - Q(t) sin(2 \pi f_c t)$')
         plt.show()
 
+    if enable_plot_const:
+
+        plt.figure(7)
+        plt.clf()
+        plt.plot(I,Q)
+        plt.title('QPSK constellation plot')
+        plt.show()
+
     result = dict()
     result['s(t)'] = s_t
     result['I(t)'] = I
@@ -153,15 +161,16 @@ def qpsk_demod(r, fc, OF, enable_plot=False):
 
     x = x[L-1::L] # I arm -- sample at every symbol instant Tsym
     y = y[L-1::L] # Q arm -- sample at every symbol instant Tsym
+
     a_hat = np.zeros(2*len(x))
     a_hat[0::2] = (x>0) # Even bits
     a_hat[1::2] = (y>0) # Odd bits
 
     if enable_plot:
 
-        plt.figure(7)
+        plt.figure(8)
         plt.clf()
-        plt.plot(x[0:200],y[0:200],'o')
+        plt.plot(x,y,'o')
         plt.title('Demodulated signal constelation plot')
         plt.show()
 

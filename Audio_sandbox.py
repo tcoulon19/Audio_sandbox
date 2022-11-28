@@ -20,13 +20,14 @@ def audio_test():
     plt.show()
 
     # Quantize data
-    quantization_levels = 64
+    quantization_levels = 16
     bins = np.arange(-1.0,1.0+2/(quantization_levels-1),2/(quantization_levels-1))
     x_quantized = np.digitize(x, bins)
 
     plt.figure(1)
     plt.plot(t,x_quantized)
     plt.title('Audio signal, quantized')
+    plt.ylim(0,quantization_levels)
     plt.show()
 
     # Convert quantized data into bit stream
@@ -43,7 +44,7 @@ def audio_test():
     fc = 100 # Carrier frequency in Hz
     OF = 8 # Oversampling factor, sampling frequency will be fs = OF*fc
     BER = np.zeros(len(EbN0dB)) # For BER values for each Eb/N0
-    result = qpsk_mod(bit_stream,fc,OF,enable_plot=False,enable_plot_const=True) # QPSK modulation
+    result = qpsk_mod(bit_stream,fc,OF,enable_plot=False,enable_plot_const=False) # QPSK modulation
     s = result['s(t)'] # Get values from returned dictionary
 
     for i, EbN0 in enumerate(EbN0dB):
@@ -52,7 +53,7 @@ def audio_test():
         r = awgn(s,EbN0,OF) # Refer Chapter section 4.1
         
         if EbN0 == 10:
-            a_hat = qpsk_demod(r,fc,OF,enable_plot=True) # QPSK demodulation
+            a_hat = qpsk_demod(r,fc,OF,enable_plot=False) # QPSK demodulation
             bit_stream_rx = np.asarray(a_hat)
         else:
             a_hat = qpsk_demod(r,fc,OF,enable_plot=False)
@@ -86,13 +87,14 @@ def audio_test():
     plt.figure(10)
     plt.plot(t,rx_quantized)
     plt.title('Audio signal received, quantized')
+    plt.ylim(0,quantization_levels)
     plt.show()
 
     rx = [(val - quantization_levels/2)/(quantization_levels/2) for val in rx_quantized]
 
     plt.figure(11)
     plt.plot(t,rx)
-    plt.title('Audio signal received, quantized')
+    plt.title('Audio signal received')
     plt.ylim(-1,1)
     plt.show()
 

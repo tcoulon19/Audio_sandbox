@@ -122,7 +122,7 @@ def qpsk_mod(a, fc, OF, enable_plot = False, enable_plot_const = False):
 
         plt.figure(7)
         plt.clf()
-        plt.plot(I,Q)
+        plt.plot(I,Q,'o')
         plt.title('QPSK constellation plot')
         plt.show()
 

@@ -45,7 +45,7 @@ def bpsk_demod(r_bb, L):
     x = x[L-1:-1:L] # I arm - sample at every L
     ak_hat = (x > 0).transpose() # threshold detector
     
-    return ak_hat 
+    return ak_hat, x
 
 
 # QPSK modulator. Note: Plots of I(t) and Q(t) plot I and Q, not I_t, and Q_t
@@ -69,7 +69,7 @@ def qpsk_mod(a, fc, OF, enable_plot = False):
         t: time base for the carrier modulated signal
     '''
     L = 2*OF # Samples in each symbol (QPSK has 2 bits per symbol)
-    I = a[0::2]; Q = a[1::2] # Evem amd odd bit streams
+    I = a[0::2]; Q = a[1::2] # Even amd odd bit streams
     # Even/odd streams at 1/2Tb baud. Note: Baud rate is rate at which infromation is transferred in a communication channel
 
     from scipy.signal import upfirdn # NRZ encoder
@@ -83,40 +83,40 @@ def qpsk_mod(a, fc, OF, enable_plot = False):
 
     if enable_plot:
 
-        plt.figure(0)
+        plt.figure(2)
         plt.clf()
         plt.plot(t,I)
         plt.xlim(0,20*L/fs)
         plt.title('I(t)')
-        plt.savefig('Ch2_images/qpsk_mod_im1')
+        plt.show()
 
-        plt.figure(1)
+        plt.figure(3)
         plt.clf()
         plt.plot(t,Q)
         plt.xlim(0,20*L/fs)
         plt.title('Q(t)')
-        plt.savefig('Ch2_images/qpsk_mod_im2')
+        plt.show()
 
-        plt.figure(2)
+        plt.figure(4)
         plt.clf()
         plt.plot(t,I_t,'r')
         plt.xlim(0,20*L/fs)
         plt.title('$I(t) cos(2 \pi f_c t)$')
-        plt.savefig('Ch2_images/qpsk_mod_im3')
+        plt.show()
 
-        plt.figure(3)
+        plt.figure(5)
         plt.clf()
         plt.plot(t,Q_t,'r')
         plt.xlim(0,20*L/fs)
         plt.title('$Q(t) sin(2 \pi f_c t)$')
-        plt.savefig('Ch2_images/qpsk_mod_im4')
+        plt.show()
 
-        plt.figure(4)
+        plt.figure(6)
         plt.clf()
         plt.plot(t,s_t)
         plt.xlim(0,20*L/fs)
         plt.title('$s(t) = I(t) cos(2 \pi f_c t) - Q(t) sin(2 \pi f_c t)$')
-        plt.savefig('Ch2_images/qpsk_mod_im5')
+        plt.show()
 
     result = dict()
     result['s(t)'] = s_t
@@ -159,11 +159,11 @@ def qpsk_demod(r, fc, OF, enable_plot=False):
 
     if enable_plot:
 
-        plt.figure(5)
+        plt.figure(7)
         plt.clf()
         plt.plot(x[0:200],y[0:200],'o')
         plt.title('Demodulated signal constelation plot')
-        plt.savefig('Ch2_images/qpsk_demod')
+        plt.show()
 
     return a_hat
 

@@ -94,7 +94,7 @@ def audio_test():
                 plt.show()
 
                 plt.figure(6)
-                plt.plot(np.real(r_bb), np.imag(r_bb), 'o')
+                plt.plot(np.real(r), np.imag(r), 'o')
                 plt.xlim(-1.5,1.5)
                 plt.ylim(-1.5,1.5)
                 plt.title('Constellation diagram')

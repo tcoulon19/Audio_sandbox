@@ -71,13 +71,18 @@ def audio_test():
     plt.legend()
     plt.show()
 
-    rx_quantized = np.empty((len(x_quantized),int(np.sqrt(quantization_levels))))
+    rx_quantized = []
     for i in range(len(x_quantized)):
-        rx_quantized[i,:int(np.sqrt(quantization_levels))] = \
+        bit_stream_rx_symb = \
             bit_stream_rx[i*int(np.sqrt(quantization_levels)):i*int(np.sqrt(quantization_levels))+\
             int(np.sqrt(quantization_levels))]
+        rx_quantized_str = list(map(int, bit_stream_rx_symb))
+        rx_quantized_str = list(map(str, rx_quantized_str))
+        rx_quantized_str = "".join(rx_quantized_str)
+        rx_quantized.append(rx_quantized_str)
 
-    print(rx_quantized[1])
+    print(rx_quantized_str)
+    print(rx_quantized)
 
 
 

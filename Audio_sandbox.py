@@ -20,7 +20,7 @@ def audio_test():
     plt.show()
 
     # Quantize data
-    quantization_levels = 16
+    quantization_levels = 32
     bins = np.arange(-1.0,1.0+2/(quantization_levels-1),2/(quantization_levels-1))
     x_quantized = np.digitize(x, bins)
 
@@ -52,7 +52,7 @@ def audio_test():
         # Compute and add AWGN noise
         r = awgn(s,EbN0,OF) # Refer Chapter section 4.1
         
-        if EbN0 == 10:
+        if EbN0 == 8:
             a_hat = qpsk_demod(r,fc,OF,enable_plot=False) # QPSK demodulation
             bit_stream_rx = np.asarray(a_hat)
         else:
